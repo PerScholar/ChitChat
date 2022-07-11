@@ -1,0 +1,15 @@
+ 000001 /* |||=== REXX ChitChat ===||| */                                       
+ 000002 "ISPEXEC LIBDEF ISPPLIB DATASET ID ('Z91682.JCL')"                      
+ 000003 zid = USERID()                                                          
+ 000004 DSN = 'Z91682.JCL(CHAT)'                                                
+ 000005 msg = ''                                                                
+ 000006 DO WHILE cc < 8                          /* LOOP UNTIL PF3 */           
+ 000007    cc = rc                                                              
+ 000008    IF cc = 0 & msg \= '$off' THEN                                       
+ 000009    DO                                                                   
+ 000010      ADDRESS ISPEXEC                                                    
+ 000011      "DISPLAY PANEL(MSGPNL) CURSOR(MSG)"                                
+ 000012    END                                                                  
+ 000013 END    
+
+                                                                

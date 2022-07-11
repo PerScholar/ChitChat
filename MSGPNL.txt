@@ -1,0 +1,23 @@
+ 000001 )PANEL KEYLIST(ISPHELP)                                                 
+ 000002 )ATTR                                                                   
+ 000003 + TYPE(TEXT) INTENS(LOW) COLOR(WHITE)                                   
+ 000004 * TYPE(TEXT)   INTENS(HIGH) COLOR(WHITE) CAPS(OFF)                      
+ 000005 ? TYPE(TEXT)   INTENS(LOW)  COLOR(TURQ)  CAPS(OFF)                      
+ 000006 % TYPE (TEXT) INTENS (HIGH) COLOR (YELLOW)                              
+ 000007 ¢ TYPE (TEXT) INTENS (HIGH) COLOR (WHITE) CAPS (OFF)                    
+ 000008 _ TYPE (INPUT) INTENS (LOW) COLOR (GREEN) PAD (_)                       
+ 000009 $ TYPE (OUTPUT) INTENS (HIGH) COLOR (RED)                               
+ 000010 @ TYPE(OUTPUT) INTENS(LOW) CAPS(OFF) COLOR (WHITE)                      
+ 000011 # AREA(SCRL) EXTEND(ON)                                                 
+ 000012 )BODY                                                                   
+ 000013 %|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 
+ 000014 %||-----------------//> ~O0O([ CHITCHAT ])O0O~ <\\-------------------|| 
+ 000015 %|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 
+ 000016 +                                                                     + 
+ 000017 +%MESSAGE:                        +%-O((( 65 CHARACTERS OR LESS. )))O-+ 
+ 000018 )INIT                                                                   
+ 000019 )REINIT                                                                 
+ 000020 )PROC                                                                   
+ 000021  /* VER (&MSG,NB,ALPHAB) */                                             
+ 000022     VER (&MSG,LEN,'<=',65)                                              
+ 000023 )END 
