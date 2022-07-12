@@ -1,15 +1,35 @@
  000001 /* |||=== REXX ChitChat ===||| */                                       
- 000002 "ISPEXEC LIBDEF ISPPLIB DATASET ID ('Z91682.JCL')"                      
- 000003 zid = USERID()                                                          
- 000004 DSN = 'Z91682.JCL(CHAT)'                                                
- 000005 msg = ''                                                                
- 000006 DO WHILE cc < 8                          /* LOOP UNTIL PF3 */           
- 000007    cc = rc                                                              
- 000008    IF cc = 0 & msg \= '$off' THEN                                       
- 000009    DO                                                                   
- 000010      ADDRESS ISPEXEC                                                    
- 000011      "DISPLAY PANEL(MSGPNL) CURSOR(MSG)"                                
- 000012    END                                                                  
- 000013 END    
+ 000002 CALL disp_logo                  /* Displaying 'splash screen' */         
+ 000003 /* Replace path in next line accordingly */                             
+ 000004 "ISPEXEC LIBDEF ISPPLIB DATASET ID ('Z91682.JCL')"                      
+ 000005 zid = USERID()                                                          
+ 000006 DSN = 'Z91682.JCL(CHAT)'                                                
+ 000007 msg = ''                                                                
+ 000008 DO WHILE cc < 8                            /* LOOP UNTIL PF3 */         
+ 000009    cc = rc                                                              
+ 000010    IF cc = 0 & msg \= '$off' THEN                                       
+ 000011    DO                                                                   
+ 000012      ADDRESS ISPEXEC                                                    
+ 000013      "DISPLAY PANEL(MSGPNLX) CURSOR(MSG)"                               
+ 000014    END                                                                  
+ 000015 END                                                                     
+ 000016 disp_logo:                                                              
+ 000017 A = " #####  #     # ### #######  #####  #     #    #    #######"       
+ 000018 B = "#     # #     #  #     #    #     # #     #   # #      #   "       
+ 000019 C = "#       #     #  #     #    #       #     #  #   #     #   "       
+ 000020 D = "#       #######  #     #    #       ####### #     #    #   "       
+ 000021 E = "#       #     #  #     #    #       #     # #######    #   "       
+ 000022 F = "#     # #     #  #     #    #     # #     # #     #    #   "       
+ 000023 G = " #####  #     # ###    #     #####  #     # #     #    #   "       
+ 000024 SAY A                                                                   
+ 000025 SAY B                                                                   
+ 000026 SAY C                                                                   
+ 000027 SAY D                                                                   
+ 000028 SAY E                                                                   
+ 000029 SAY F                                                                   
+ 000030 SAY G                                                                   
+ 000031 return                                                                  
 
+
+                                                                
                                                                 
