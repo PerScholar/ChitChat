@@ -4,37 +4,51 @@
  000004 "ISPEXEC LIBDEF ISPPLIB DATASET ID ('Z91682.JCL')"                      
  000005 zid = USERID()                                                          
  000006 DSN = 'Z91682.JCL(CHAT)'                                                
- 000007 msg = ''                                                                
+ 000007 /*  msg = ''  */                                                             
  000008 DO WHILE cc < 8                            /* Loop unil PF3 */         
  000009    cc = rc                                                              
  000010    IF cc = 0 & msg \= '$off' THEN                                       
  000011    DO                                                                   
  000012      ADDRESS ISPEXEC                                                    
  000013      "DISPLAY PANEL(MSGPNL) CURSOR(MSG)"   
- 000014      CALL to_lower    /* converting messages to lowercase */              
- 000015    END                                                                  
- 000016 END                                                                     
- 000017 disp_logo:                                                              
- 000018        A = " #####  #     # ### #######  #####  #     #    #    #######"
- 000019        B = "#     # #     #  #     #    #     # #     #   # #      #   "
- 000020        C = "#       #     #  #     #    #       #     #  #   #     #   "
- 000021        D = "#       #######  #     #    #       ####### #     #    #   "
- 000022        E = "#       #     #  #     #    #       #     # #######    #   "
- 000023        F = "#     # #     #  #     #    #     # #     # #     #    #   "
- 000024        G = " #####  #     # ###    #     #####  #     # #     #    #   "
- 000025        SAY A                                                            
- 000026        SAY B                                                            
- 000027        SAY C                                                            
- 000028        SAY D                                                            
- 000029        SAY E                                                            
- 000030        SAY F                                                            
- 000031        SAY G                                                                                                                            
- 000032 return                                                                  
- 000033 to_lower:                                                               
- 000034          upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'                           
- 000035          lower = 'abcdefghijklmnopqrstuvwxyz'                           
- 000036          msg = TRANSLATE(msg,lower,upper)                               
- 000037 return 
+ 000014      CALL to_lower    /* converting messages to lowercase */    
+ 000015 /* formatted message info displayed above each message */   
+ 000016      fmsg = '|'||DATE()||' - '||TIME()||'| '||zid||': '   
+ 000017      CALL get_msg    /* Retrieving saved messages */
+ 000018    END                                                                  
+ 000019 END                                                                     
+ 000020 disp_logo:                                                              
+ 000021        A = " #####  #     # ### #######  #####  #     #    #    #######"
+ 000022        B = "#     # #     #  #     #    #     # #     #   # #      #   "
+ 000023        C = "#       #     #  #     #    #       #     #  #   #     #   "
+ 000024        D = "#       #######  #     #    #       ####### #     #    #   "
+ 000025        E = "#       #     #  #     #    #       #     # #######    #   "
+ 000026        F = "#     # #     #  #     #    #     # #     # #     #    #   "
+ 000027        G = " #####  #     # ###    #     #####  #     # #     #    #   "
+ 000028        SAY A                                                            
+ 000029        SAY B                                                            
+ 000030        SAY C                                                            
+ 000031        SAY D                                                            
+ 000032        SAY E                                                            
+ 000033        SAY F                                                            
+ 000034        SAY G                                                                                                                            
+ 000035 return                                                                  
+ 000036 to_lower:                                                               
+ 000037          upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'                           
+ 000038          lower = 'abcdefghijklmnopqrstuvwxyz'                           
+ 000039          msg = TRANSLATE(msg,lower,upper)                               
+ 000040 return 
+ 000041 get_msg:                                                                
+ 000042         ADDRESS TSO                                                     
+ 000043         "ALLOC DDNAME(indd) DA('"||DSN||"') SHR REUSE"                  
+ 000044         "EXECIO * DISKR indd (STEM record. FINIS)"                      
+ 000045         "FREE DDNAME(indd)"                                             
+ 000046          k = 1                                                          
+ 000047          DO WHILE k < record.0 & record.k \= ''                         
+ 000048             msgarr.k = record.k                                         
+ 000049             k = k + 1                                                   
+ 000050          END                                                            
+ 000051 return 
 
                                                                 
                                                                 
