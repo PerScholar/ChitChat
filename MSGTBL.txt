@@ -1,4 +1,4 @@
- 000001 )PANEL                                                                  
+ 000001 )PANEL KEYLIST(ISPHELP)                                                                  
  000002 )ATTR                                                                   
  000003      % TYPE (TEXT) INTENS (HIGH) COLOR (YELLOW)                         
  000004      ¢ TYPE (TEXT) INTENS (HIGH) COLOR (WHITE) CAPS (OFF)               
