@@ -1,0 +1,18 @@
+ 000001 )PANEL                                                                  
+ 000002 )ATTR                                                                   
+ 000003      % TYPE (TEXT) INTENS (HIGH) COLOR (YELLOW)                         
+ 000004      ¢ TYPE (TEXT) INTENS (HIGH) COLOR (WHITE) CAPS (OFF)               
+ 000005      _ TYPE (INPUT) INTENS (LOW) COLOR (GREEN) PAD (_)                  
+ 000006      $ TYPE (OUTPUT) INTENS (HIGH) COLOR (YELLOW)                       
+ 000007      @ TYPE(OUTPUT) INTENS(LOW) CAPS(OFF) COLOR (WHITE)                 
+ 000008 )BODY                                                                   
+ 000009 %-O((( PRESS ENTER TO EXIT. )))O-                                       
+ 000010 +SCROLL ==>_SAMT+                                                       
+ 000011 )MODEL                                                                  
+ 000012       @LINE                                                            +
+ 000013 )INIT                                                                   
+ 000014     &SAMT=PAGE                                                          
+ 000015 )REINIT                                                                 
+ 000016     &SAMT=PAGE                                                          
+ 000017 )PROC                                                                   
+ 000018 )END                                                                    

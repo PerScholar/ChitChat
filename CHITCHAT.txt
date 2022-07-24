@@ -1,54 +1,79 @@
- 000001 /* |||=== REXX ChitChat ===||| */                                       
- 000002 CALL disp_logo                  /* Displaying 'splash screen' */         
+ 000001 /* |||=== REXX - ChitChat ===||| */                                     
+ 000002 CALL disp_logo                          /* Displaying 'splash screen'*/ 
  000003 /* Replace path in next line accordingly */                             
  000004 "ISPEXEC LIBDEF ISPPLIB DATASET ID ('Z91682.JCL')"                      
  000005 zid = USERID()                                                          
  000006 DSN = 'Z91682.JCL(CHAT)'                                                
- 000007 /*  msg = ''  */                                                             
- 000008 DO WHILE cc < 8                            /* Loop unil PF3 */         
- 000009    cc = rc                                                              
- 000010    IF cc = 0 & msg \= '$off' THEN                                       
- 000011    DO                                                                   
- 000012      ADDRESS ISPEXEC                                                    
- 000013      "DISPLAY PANEL(MSGPNL) CURSOR(MSG)"   
- 000014      CALL to_lower    /* converting messages to lowercase */    
- 000015 /* formatted message info displayed above each message */   
- 000016      fmsg = '|'||DATE()||' - '||TIME()||'| '||zid||': '   
- 000017      CALL get_msg    /* Retrieving saved messages */
- 000018    END                                                                  
- 000019 END                                                                     
- 000020 disp_logo:                                                              
- 000021        A = " #####  #     # ### #######  #####  #     #    #    #######"
- 000022        B = "#     # #     #  #     #    #     # #     #   # #      #   "
- 000023        C = "#       #     #  #     #    #       #     #  #   #     #   "
- 000024        D = "#       #######  #     #    #       ####### #     #    #   "
- 000025        E = "#       #     #  #     #    #       #     # #######    #   "
- 000026        F = "#     # #     #  #     #    #     # #     # #     #    #   "
- 000027        G = " #####  #     # ###    #     #####  #     # #     #    #   "
- 000028        SAY A                                                            
- 000029        SAY B                                                            
- 000030        SAY C                                                            
- 000031        SAY D                                                            
- 000032        SAY E                                                            
- 000033        SAY F                                                            
- 000034        SAY G                                                                                                                            
- 000035 return                                                                  
- 000036 to_lower:                                                               
- 000037          upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'                           
- 000038          lower = 'abcdefghijklmnopqrstuvwxyz'                           
- 000039          msg = TRANSLATE(msg,lower,upper)                               
- 000040 return 
- 000041 get_msg:                                                                
- 000042         ADDRESS TSO                                                     
- 000043         "ALLOC DDNAME(indd) DA('"||DSN||"') SHR REUSE"                  
- 000044         "EXECIO * DISKR indd (STEM record. FINIS)"                      
- 000045         "FREE DDNAME(indd)"                                             
- 000046          k = 1                                                          
- 000047          DO WHILE k < record.0 & record.k \= ''                         
- 000048             msgarr.k = record.k                                         
- 000049             k = k + 1                                                   
- 000050          END                                                            
- 000051 return 
-
-                                                                
-                                                                
+ 000007 DO WHILE cc < 8                                    /* Loop until PF3 */ 
+ 000008    cc = rc                                                              
+ 000009    IF cc = 0 & msg \= '$off' THEN                                       
+ 000010    DO                                                                   
+ 000011      ADDRESS ISPEXEC                                                    
+ 000012      "DISPLAY PANEL(MSGPNLX) CURSOR(MSG)"                               
+ 000013      CALL to_lower               /* Converting messages to lowercase */ 
+ 000014 /* formatted message info displayed above each message */               
+ 000015      fmsg = '|'||DATE()||' - '||TIME()||'| '||zid||': '                 
+ 000016      CALL get_msg                /* Retrieving saved messages */        
+ 000017 /* Displaying the retrieved messages (20 or less)*/                     
+ 000018      CALL disp_msg                                                      
+ 000019    END                                                                  
+ 000020 END                                                                     
+ 000021                                                                         
+ 000022 get_msg:                                                                
+ 000023         ADDRESS TSO                                                     
+ 000024         "ALLOC DDNAME(indd) DA('"||DSN||"') SHR REUSE"                  
+ 000025         "EXECIO * DISKR indd (STEM record. FINIS)"                      
+ 000026         "FREE DDNAME(indd)"                                             
+ 000027          k = 1                                                          
+ 000028          DO WHILE k < record.0 & record.k \= ''                         
+ 000029             msgarr.k = record.k                                         
+ 000030             k = k + 1                                                   
+ 000031          END                                                            
+ 000032 return                                                                  
+ 000033                                                                         
+ 000034 disp_msg:                                                               
+ 000035          IF k > 20 THEN idx = k - 20                                    
+ 000036          ELSE idx = 1                                                   
+ 000037          j = k - idx                                                    
+ 000038          DO i = 1 to j                                                  
+ 000039             arr.i = msgarr.idx                                          
+ 000040             idx = idx + 1                                               
+ 000041          END                                                            
+ 000042          arr.i = msg                                                    
+ 000043          i = i + 1                                                      
+ 000044          arr.i = fmsg                                                   
+ 000045          "ADDPOP"                                                       
+ 000046          ZWINTTL = "MESSAGES"                                           
+ 000047          'TBCREATE FILE NAMES(LINE)'                                    
+ 000048          DO n = i TO 1 BY -1                                            
+ 000049             LINE = arr.n                                                
+ 000050             'TBADD FILE'                                                
+ 000051          END                                                            
+ 000052          'TBTOP FILE'                                                   
+ 000053          "TBDISPL" FILE "PANEL("MSGTBL")"                               
+ 000054          'TBEND FILE'                                                   
+ 000055          "REMPOP"                                                       
+ 000056 return                                                                  
+ 000057                                                                         
+ 000058 to_lower:                                                               
+ 000059          upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'                           
+ 000060          lower = 'abcdefghijklmnopqrstuvwxyz'                           
+ 000061          msg = TRANSLATE(msg,lower,upper)                               
+ 000062 return                                                                  
+ 000063                                                                         
+ 000064 disp_logo:                                                              
+ 000065        A = " #####  #     # ### #######  #####  #     #    #    #######"
+ 000066        B = "#     # #     #  #     #    #     # #     #   # #      #   "
+ 000067        C = "#       #     #  #     #    #       #     #  #   #     #   "
+ 000068        D = "#       #######  #     #    #       ####### #     #    #   "
+ 000069        E = "#       #     #  #     #    #       #     # #######    #   "
+ 000070        F = "#     # #     #  #     #    #     # #     # #     #    #   "
+ 000071        G = " #####  #     # ###    #     #####  #     # #     #    #   "
+ 000072        SAY A                                                            
+ 000073        SAY B                                                            
+ 000074        SAY C                                                            
+ 000075        SAY D                                                            
+ 000076        SAY E                                                            
+ 000077        SAY F                                                            
+ 000078        SAY G                                                            
+ 000079 return                                                                  
